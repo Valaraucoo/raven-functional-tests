@@ -18,3 +18,10 @@ $ pip install -r requirements.txt
 ```
 
 Now you can run tests using `pytest` command.
+
+### Running tests
+
+Before running test, make sure that your local server is running on port `8080`. After that run tests:
+```bash
+$ pytest
+```
