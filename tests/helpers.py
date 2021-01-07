@@ -36,11 +36,13 @@ def dashboard_central_bar_testing(driver, links):
 
 def dashboard_top_bar_testing(driver):
 
+    url = driver.current_url
+
     edit = driver.find_element_by_xpath('//i[@class="fas fa-cog"]')
     driver.execute_script("arguments[0].click();", edit)
     assert driver.current_url == BASE_URL + 'profile/edit/'
 
-    driver.get(BASE_URL)
+    driver.get(url)
 
     notices = driver.find_element_by_xpath('//i[@class="far fa-bell"]')
     driver.execute_script("arguments[0].click();", notices)
@@ -55,10 +57,16 @@ def dashboard_top_bar_testing(driver):
         element = user_menu.find_element_by_xpath('//*[text()[contains(., "' + link + '")]]')
         driver.execute_script("arguments[0].click();", element)
         assert driver.current_url == BASE_URL + links[link]
-        driver.get(BASE_URL)
+        driver.get(url)
 
 
-def sidebar_testing(driver, links):
+def sidebar_testing(driver, is_student):
+
+    url = driver.current_url
+    links = {'Strona Główna': '', 'Plan zajęć': 'schedule/', 'Kursy': 'courses/', 'Ogłoszenia': 'notices/'}
+
+    if is_student:
+        links.update({'Zadania': 'assignments/', 'Oceny': 'marks/'})
 
     for link in links:
         sidebar_button = driver.find_element_by_id('openbtn')
@@ -70,7 +78,7 @@ def sidebar_testing(driver, links):
         element = sidebar.find_element_by_xpath('//*[text()[contains(., "' + link + '")]]')
         driver.execute_script("arguments[0].click();", element)
         assert driver.current_url == BASE_URL + links[link]
-        driver.get(BASE_URL)
+        driver.get(url)
 
     for link in ['Mój profil', 'Wyloguj']:
 
@@ -88,4 +96,4 @@ def sidebar_testing(driver, links):
         element = my_account.find_element_by_xpath('//*[text()[contains(., "' + link + '")]]')
         driver.execute_script("arguments[0].click();", element)
         if link == 'Mój profil':
-            driver.get(BASE_URL)
+            driver.get(url)

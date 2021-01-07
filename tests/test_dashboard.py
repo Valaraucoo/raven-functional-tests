@@ -29,8 +29,7 @@ class TestDashboard:
 
         dashboard_top_bar_testing(driver)
 
-        sites = {'Strona Główna': '', 'Plan zajęć': 'schedule/', 'Kursy': 'courses/', 'Ogłoszenia': 'notices/'}
-        sidebar_testing(driver, sites)
+        sidebar_testing(driver, False)
 
     def test_student_dashboard(self, driver):
 
@@ -53,5 +52,4 @@ class TestDashboard:
 
         dashboard_top_bar_testing(driver)
 
-        sites = {'Strona Główna': '', 'Plan zajęć': 'schedule/', 'Kursy': 'courses/', 'Ogłoszenia': 'notices/', 'Zadania': 'assignments/', 'Oceny': 'marks/'}
-        sidebar_testing(driver, sites)
+        sidebar_testing(driver, True)
