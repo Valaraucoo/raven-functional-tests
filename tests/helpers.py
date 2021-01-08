@@ -34,7 +34,7 @@ def dashboard_central_bar_testing(driver, links):
         driver.get(BASE_URL)
 
 
-def dashboard_top_bar_testing(driver):
+def top_bar_testing(driver):
 
     url = driver.current_url
 
@@ -97,3 +97,84 @@ def sidebar_testing(driver, is_student):
         driver.execute_script("arguments[0].click();", element)
         if link == 'Mój profil':
             driver.get(url)
+
+
+def course_screen_testing(driver, is_student):
+
+    driver.get(BASE_URL + 'courses/')
+
+    time.sleep(.5)
+    course_button = driver.find_element_by_xpath('//h4[@class="text-lg leading-6 font-medium text-gray-900 '
+                                                 'transition-all duration-200 hover:text-gray-600"]') \
+        .find_element_by_tag_name('a')
+    driver.execute_script("arguments[0].click();", course_button)
+
+    url = driver.current_url
+
+    if is_student:
+        links = {'Ogłoszenia': ['notices', 'Ogłoszenia'],
+                 'Moje oceny': ['my-marks', 'Moje oceny'],
+                 'Dołącz do grupy': ['groups', 'Dołącz do grupy']}
+    else:
+        links = {'Ogłoszenia': ['notices', 'Ogłoszenia', 'Tytuł ogłoszenia', 'Ogłoszenie', 'Dodaj ogłoszenie'],
+                 'Edytuj kurs': ['edit', 'Edytuj', 'Nazwa kursu', 'Opis kursu', 'Zapisz zmiany', 'Dodaj ocene'],
+                 'Zarządzaj grupami': ['groups', 'Dołącz do grupy', 'Dodaj grupę'],
+                 'Oceny': ['total-marks', 'Wykaz ocen', 'FILTRUJ WYSTAWIONE OCENY', 'Wstaw']}
+
+    for name in links.keys():
+        manage_bar = driver.find_element_by_xpath('//div[@class="flex mt-4 mb-4"]')
+        assert name in driver.page_source
+
+        element = manage_bar.find_element_by_xpath('//*[text()[contains(., "' + name + '")]]')
+        driver.execute_script("arguments[0].click();", element)
+        assert driver.current_url == url + links[name][0] + '/'
+        for i in range(1, len(links[name])):
+            assert links[name][i] in driver.page_source
+        driver.get(url)
+
+    # head teacher link testing
+    para = driver.find_element_by_xpath('//p[@class="text-sm text-gray-600"]')
+    head_teacher = para.find_element_by_tag_name('a')
+    driver.execute_script("arguments[0].click();", head_teacher)
+
+    assert (BASE_URL + 'profile/') in driver.current_url
+    driver.get(url)
+
+    # teacher link testing
+    teachers = driver.find_element_by_xpath('//p[@class="mt-1 text-sm text-gray-600"]')
+    teacher = teachers.find_element_by_tag_name('a')
+    driver.execute_script("arguments[0].click();", teacher)
+
+    assert (BASE_URL + 'profile/') in driver.current_url
+    driver.get(url)
+
+    elements = ['Tematyka:', 'Opis:', 'Materialy i pliki:', 'Link do wydarzenia:']
+
+    if not is_student:
+        elements.append('Edytuj')
+
+    lecture_count = len(driver.find_element_by_xpath('//div[@class="max-w-full mx-auto bg-white rounded-lg overflow-hidden shadow-lg"]/div[2]').find_elements_by_tag_name('div'))
+    if lecture_count != 0:
+        lecture = driver.find_element_by_xpath('//div[@class="px-4 py-4 mx-2"][1]/div[1]/div[2]/h4/a')
+        driver.execute_script("arguments[0].click();", lecture)
+
+        assert BASE_URL + 'courses/lecture/' in driver.current_url
+        for element in elements:
+            assert element in driver.find_element_by_id('dashboard_content').get_attribute('innerHTML')
+        driver.get(url)
+
+    labs_count = len(driver.find_element_by_xpath('//div[@class="max-w-full mx-auto bg-white rounded-lg overflow-hidden shadow-lg"]/div[3]').find_elements_by_tag_name('div'))
+
+    if labs_count != 0:
+        laboratory = driver.find_element_by_xpath('//div[@class="px-4 py-4 mx-2"][2]/div[1]/div[2]/h4/a')
+        driver.execute_script("arguments[0].click();", laboratory)
+
+        laboratory = elements
+        laboratory.extend(['Poprzednie laboratorium:', 'Dodaj zadanie'])
+        assert BASE_URL + 'courses/laboratory/' in driver.current_url
+        for element in laboratory:
+            assert element in driver.find_element_by_id('dashboard_content').get_attribute('innerHTML')
+        driver.get(url)
+
+    top_bar_testing(driver)
+    sidebar_testing(driver, is_student)
