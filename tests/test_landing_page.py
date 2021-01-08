@@ -4,6 +4,7 @@ from helpers import *
 class TestLandingPageLoading:
 
     def test_get_base_url(self, driver):
+
         driver.get(BASE_URL)
 
         # waiting for animation
@@ -26,18 +27,5 @@ class TestLandingPageLoading:
         assert 'Witamy w supporcie!' in driver.find_element_by_tag_name('h2').get_attribute('innerHTML')
 
     def test_login_to_dashboard(self, driver):
-        driver.get(BASE_URL)
-        assert driver.current_url == BASE_URL + 'login/'
 
-        # waiting for animation
-        time.sleep(2)
-
-        email_input = driver.find_element_by_id('id_email')
-        password_input = driver.find_element_by_id('id_password')
-        login_btn = driver.find_element_by_css_selector('button')
-
-        email_input.send_keys('admin@admin.com')
-        password_input.send_keys('admin')
-
-        login_btn.click()
-        assert driver.current_url == BASE_URL
+        login()

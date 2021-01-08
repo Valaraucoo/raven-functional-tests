@@ -5,6 +5,7 @@ BASE_URL = 'http://127.0.0.1:8080/'
 
 
 def login(driver, email='admin@admin.com', password='admin'):
+
     driver.get(BASE_URL)
     assert driver.current_url == BASE_URL + 'login/'
 

@@ -4,6 +4,7 @@ from helpers import *
 class TestDashboard:
 
     def test_admin_login(self, driver):
+
         login(driver)
 
         driver.get(BASE_URL + 'admin/')
@@ -15,6 +16,7 @@ class TestDashboard:
         assert 'Site administration' in header.get_attribute('innerHTML')
 
     def test_teacher_dashboard(self, driver):
+
         login(driver, 'teacher0@raven.test', 'teacher')
 
         boxes = {'Mój profil': 'profile', 'Moje Kursy': 'courses', 'Plan zajęć': 'schedule'}
@@ -27,7 +29,7 @@ class TestDashboard:
         assert 'Nadchodzące wykłady' in incoming.get_attribute('innerHTML')
         assert 'Nadchodzące laboratoria' in incoming.get_attribute('innerHTML')
 
-        dashboard_top_bar_testing(driver)
+        top_bar_testing(driver)
 
         sidebar_testing(driver, False)
 
@@ -50,6 +52,6 @@ class TestDashboard:
         assert 'Nadchodzące wykłady' in div3.get_attribute('innerHTML')
         assert 'Nadchodzące laboratoria' in div3.get_attribute('innerHTML')
 
-        dashboard_top_bar_testing(driver)
+        top_bar_testing(driver)
 
         sidebar_testing(driver, True)
