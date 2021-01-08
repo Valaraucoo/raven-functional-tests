@@ -11,6 +11,6 @@ class TestCourseScreen:
 
     def test_student_course_screen(self, driver):
 
-        login(driver, 'student1@raven.test', 'student')
+        # login(driver, 'student1@raven.test', 'student')
 
         course_screen_testing(driver, True)
