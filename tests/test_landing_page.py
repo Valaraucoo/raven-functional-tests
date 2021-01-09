@@ -28,4 +28,4 @@ class TestLandingPageLoading:
 
     def test_login_to_dashboard(self, driver):
 
-        login()
+        login(driver, 'admin@admin.com', 'admin')

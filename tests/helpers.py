@@ -179,3 +179,29 @@ def course_screen_testing(driver, is_student):
 
     top_bar_testing(driver)
     sidebar_testing(driver, is_student)
+
+
+def get_courses_data(driver):
+
+    time.sleep(.5)
+
+    courses = driver.find_elements_by_xpath('//div[@class="ml-4"]')
+    courses_data = {}
+
+    for course in courses:
+        course_name = course.find_element_by_tag_name('a').text
+
+        teachers_element = course.find_elements_by_xpath('//span[@class="mr-1"]')
+
+        teachers = [teacher.text.split(" ") for teacher in teachers_element]
+
+        exam = course.find_element_by_xpath('./p[3]/span[2]').text
+        language = course.find_element_by_xpath('./p[4]/span').text.split(' ')[1]
+
+        courses_data[course_name] = {'Teachers': teachers,
+                                     'Exam': exam,
+                                     'Language': language}
+
+        courses_data[course_name]['Language'] = 'Angielski' if courses_data[course_name]['Language'] == 'EN' else 'Polski'
+
+    return courses_data
